@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 
@@ -22,13 +22,38 @@ export default function ManageCourse({route, navigation}) {
 function deleteCourse(){ //hangi ekrandan geldiyse oraya gidecek
   navigation.goBack();
 }
-
+function cancelHandler(){ //hangi ekrandan geldiyse oraya gidecek
+  navigation.goBack();
+}
 
 
 
 
   return (
     <View style={styles.container}>
+
+
+<View style={styles.buttons}>
+  <Pressable onPress={cancelHandler}>
+    <View style={styles.cancel}>
+      <Text style={styles.cancelText}>
+        İptal Et
+      </Text>
+    </View>
+  </Pressable>
+  <Pressable>
+    <View style={styles.addOrDelete}>
+      <Text style={styles.addOrDeleteText}>
+       {isEditing ? "Güncelle":"Ekle"}
+      </Text>
+    </View>
+  </Pressable>
+</View>
+
+
+
+
+
       {isEditing && ( <View style={styles.deleteContainer}> <FontAwesome5 name="trash" size={40} color="black" onPress={deleteCourse} />
       </View>
       )}
@@ -48,5 +73,31 @@ deleteContainer:{
   paddingTop:10,
   marginTop:16,
 },
+buttons:{
+  flexDirection:'row',
+  justifyContent:'center',
+},
+cancel:{
+  backgroundColor:'red',
+  minWidth:120,
+  marginRight:10,
+  padding: 8,
+  alignItems: 'center',
+},
 
+cancelText:{
+  color:'white',
+},
+
+addOrDelete:{
+  backgroundColor:'blue',
+  minWidth:120,
+  marginRight:10,
+  padding: 8,
+  alignItems: 'center',
+},
+
+addOrDeleteText:{
+  color:'white' ,
+},
 });
