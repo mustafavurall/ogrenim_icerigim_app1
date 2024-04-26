@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useLayoutEffect } from 'react';
-
+import { FontAwesome5 } from '@expo/vector-icons';
 
 
 export default function ManageCourse({route, navigation}) {
@@ -18,11 +18,35 @@ export default function ManageCourse({route, navigation}) {
     })
 
   },[navigation,isEditing]);
+
+function deleteCourse(){ //hangi ekrandan geldiyse oraya gidecek
+  navigation.goBack();
+}
+
+
+
+
+
   return (
-    <View>
-      <Text>ManageCourse</Text>
+    <View style={styles.container}>
+      {isEditing && ( <View style={styles.deleteContainer}> <FontAwesome5 name="trash" size={40} color="black" onPress={deleteCourse} />
+      </View>
+      )}
     </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+container:{
+  flex:1,
+  padding: 25,
+},
+deleteContainer:{
+  alignItems:'center',
+  borderTopWidth:2,
+  borderTopColor:'blue',
+  paddingTop:10,
+  marginTop:16,
+},
+
+});
