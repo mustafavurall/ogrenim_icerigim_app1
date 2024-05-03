@@ -1,9 +1,12 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useLayoutEffect } from 'react';
+import React, { useContext, useLayoutEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { CoursesContext } from '../store/coursesContext';
 
 
 export default function ManageCourse({route, navigation}) {
+
+  const coursesContext = useContext(CoursesContext);
   const courseId=route.params?.courseId;
   let isEditing = false;
   
@@ -20,10 +23,38 @@ export default function ManageCourse({route, navigation}) {
   },[navigation,isEditing]);
 
 function deleteCourse(){ //hangi ekrandan geldiyse oraya gidecek
+  
+  coursesContext.deleteCourse(courseId);
   navigation.goBack();
+
 }
 function cancelHandler(){ //hangi ekrandan geldiyse oraya gidecek
   navigation.goBack();
+}
+
+
+function addOrUpdateHandler(){// duruma göre contexte gönderme
+
+  if(isEditing){
+    coursesContext.updateCourse(courseId,{
+      description:'Güncelleme Kurs' ,
+      amount:299,
+      date:new Date(),
+    });
+
+  }
+  else{
+    coursesContext.addCourse({
+      description:'Eklenen Kurs' ,
+      amount:299,
+      date:new Date(),
+    });
+  }
+
+
+navigation.goBack();
+  
+
 }
 
 
@@ -41,7 +72,7 @@ function cancelHandler(){ //hangi ekrandan geldiyse oraya gidecek
       </Text>
     </View>
   </Pressable>
-  <Pressable>
+  <Pressable onPress={addOrUpdateHandler}>
     <View style={styles.addOrDelete}>
       <Text style={styles.addOrDeleteText}>
        {isEditing ? "Güncelle":"Ekle"}
