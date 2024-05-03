@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
+import Courses from '../components/Courses';
+import { CoursesContext } from '../store/coursesContext';
+
+
 
 export default function AllCourses() {
-  return (
-    <View>
-      <Text>AllCourses</Text>
-    </View>
-  )
+const coursesContext = useContext(CoursesContext);
+
+  return <Courses courses={coursesContext.courses} coursesPeriod="Hepsi" nullText="Hiçbir Kursa Kayıtlı Değilsiniz"/>; //Yollamak için
 }
 
 const styles = StyleSheet.create({})
