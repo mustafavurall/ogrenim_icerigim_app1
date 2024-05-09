@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { useContext, useLayoutEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { CoursesContext } from '../store/coursesContext';
+import CourseForm from '../components/CourseForm';
 
 
 export default function ManageCourse({route, navigation}) {
@@ -60,10 +61,10 @@ navigation.goBack();
 
 
 
-  return (
+  return ( //butonlarım burada
     <View style={styles.container}>
 
-
+ <CourseForm/>
 <View style={styles.buttons}>
   <Pressable onPress={cancelHandler}>
     <View style={styles.cancel}>
