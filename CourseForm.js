@@ -5,7 +5,39 @@ import Input from './Input'
 export default function CourseForm() {
  
  //buradan input componentine geçiyorum
-    return  <Input/>;
+    return (
+    <View>
+
+<Input label="Tutar" textInputConfig={{
+
+  keyboardType:'decimal-pad',
+  onChangeText:()=>{}
+
+}}/>
+
+
+<Input label="Tarih" textInputConfig={{
+
+placeHolder:'YYYY-MM-DD',
+maxLength:10,
+onChangeText:()=>{}
+
+}}/>
+
+
+<Input label="Başlık" textInputConfig={{
+
+multiline:true,
+onChangeText:()=>{}
+
+}}/>
+
+    </View>
+    
+);
+    
+    
+    
   
 }
 

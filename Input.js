@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View , TextInput } from 'react-native'
 import React from 'react'
 
-export default function Input({textInputConfig}) {
+export default function Input({label,textInputConfig}) {
   return (
     <View>
-      <Text>Input</Text>
+      <Text>{label}</Text>
       <TextInput {...textInputConfig}/>
     </View>
   )
