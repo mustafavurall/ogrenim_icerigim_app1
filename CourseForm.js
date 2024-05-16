@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View ,Pressable } from 'react-native'
 import React, { useState } from 'react'
 import Input from './Input'
 
 
-export default function CourseForm() {
+export default function CourseForm({cancelHandler,addOrUpdateHandler,buttonLabel
+}) {
  
   const [inputs, setInputs] = useState({
 
@@ -69,8 +70,27 @@ multiline:true,
 onChangeText: inputChange.bind(this,'description'),
 value:inputs.description,
 
-}}/>
+}}
 
+/>
+<View style={styles.buttons}>
+  <Pressable onPress={cancelHandler}>
+    <View style={styles.cancel}>
+      <Text style={styles.cancelText}>
+        İptal Et
+      </Text>
+    </View>
+  </Pressable>
+  <Pressable onPress={addOrUpdateHandler}>
+    <View style={styles.addOrDelete}>
+      <Text style={styles.addOrDeleteText}>
+
+         {buttonLabel}
+       
+      </Text>
+    </View>
+  </Pressable>
+</View>
     </View>
     
 );
@@ -99,6 +119,34 @@ flexDirection:'row'
   },
   flexAll:{
     flex:1,
+  },
+
+  buttons:{
+    flexDirection:'row',
+    justifyContent:'center',
+  },
+  cancel:{
+    backgroundColor:'red',
+    minWidth:120,
+    marginRight:10,
+    padding: 8,
+    alignItems: 'center',
+  },
+  
+  cancelText:{
+    color:'white',
+  },
+  
+  addOrDelete:{
+    backgroundColor:'blue',
+    minWidth:120,
+    marginRight:10,
+    padding: 8,
+    alignItems: 'center',
+  },
+  
+  addOrDeleteText:{
+    color:'white' ,
   },
 
 })
