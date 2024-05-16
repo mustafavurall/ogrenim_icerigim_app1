@@ -6,23 +6,33 @@ export default function CourseForm() {
  
  //buradan input componentine geçiyorum
     return (
-    <View>
+    <View style={styles.form}>
 
-<Input label="Tutar" textInputConfig={{
+   <Text style={styles.title}>Kurs Bilgileri</Text>
 
-  keyboardType:'decimal-pad',
-  onChangeText:()=>{}
+      <View style={styles.priceAndDate}>
+      <Input 
+      style={styles.flexAll}
+      label="Tutar" textInputConfig={{
+
+keyboardType:'decimal-pad',
+onChangeText:()=>{}
 
 }}/>
 
 
-<Input label="Tarih" textInputConfig={{
+<Input // başlık için styles yollamadım(alt tarafı bozmadım)
+style={styles.flexAll}
+label="Tarih" textInputConfig={{
 
 placeHolder:'YYYY-MM-DD',
 maxLength:10,
 onChangeText:()=>{}
 
 }}/>
+      </View>
+
+
 
 
 <Input label="Başlık" textInputConfig={{
@@ -41,4 +51,25 @@ onChangeText:()=>{}
   
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+form:{
+marginTop:40, //yularıdan ayırdım
+},
+
+title:{
+fontSize: 25, //boyut
+fontWeight:'bold', //kalınlık
+textAlign: 'center', //ortalama
+color:'blue',
+marginVertical:20,
+
+},
+  priceAndDate:{
+flexDirection:'row'
+
+  },
+  flexAll:{
+    flex:1,
+  },
+
+})
