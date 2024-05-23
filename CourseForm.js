@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View ,Pressable } from 'react-native'
+import { StyleSheet, Text, View ,Pressable ,Alert} from 'react-native'
 import React, { useState } from 'react'
 import Input from './Input'
 import { getFormattedDate} from '../helper/date';
@@ -23,6 +23,16 @@ description:inputs.description
 
     };
 
+    const amountIsValid=!isNaN(courseData.amount) && courseData.amount >0;
+    const dateIsValid=courseData.date.toString() !== 'Invalid Date' ;
+    const descriptionIsValid=courseData.description.trim().length>0 ;// sağdan soldan boşluk olmasını engelledik
+    
+    if(!amountIsValid || !dateIsValid || !descriptionIsValid){
+Alert.alert('Hatalı Giriş','Lütfen tüm alanları doğru formatta giriniz!');
+      return;
+    }
+    
+    
     onSubmit(courseData);
 
   }
