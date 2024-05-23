@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Input from './Input'
 
 
-export default function CourseForm({cancelHandler,addOrUpdateHandler,buttonLabel
+export default function CourseForm({cancelHandler,onSubmit,buttonLabel
 }) {
  
   const [inputs, setInputs] = useState({
@@ -12,7 +12,20 @@ export default function CourseForm({cancelHandler,addOrUpdateHandler,buttonLabel
     date:'',
     description:'',
 
-  })
+  });
+
+  function addOrUpdateHandler(){
+
+    const courseData={
+amount:Number(inputs.amount) ,
+date:new Date(inputs.date),
+description:inputs.description
+
+    };
+
+    onSubmit(courseData);
+
+  }
 
 
   console.log(inputs);

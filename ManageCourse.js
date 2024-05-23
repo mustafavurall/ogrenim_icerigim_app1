@@ -32,24 +32,16 @@ function deleteCourse(){ //hangi ekrandan geldiyse oraya gidecek
 function cancelHandler(){ //hangi ekrandan geldiyse oraya gidecek
   navigation.goBack();
 }
+ 
 
-
-function addOrUpdateHandler(){// duruma göre contexte gönderme
+function addOrUpdateHandler(courseData){// duruma göre contexte gönderme
 
   if(isEditing){
-    coursesContext.updateCourse(courseId,{
-      description:'Güncelleme Kurs' ,
-      amount:299,
-      date:new Date(),
-    });
+    coursesContext.updateCourse(courseId, courseData);
 
   }
   else{
-    coursesContext.addCourse({
-      description:'Eklenen Kurs' ,
-      amount:299,
-      date:new Date(),
-    });
+    coursesContext.addCourse(courseData);
   }
 
 
@@ -66,7 +58,7 @@ navigation.goBack();
 
  <CourseForm
  buttonLabel={isEditing ? 'Güncelle' : 'Ekle'}
- addOrUpdateHandler={addOrUpdateHandler}
+ onSubmit={addOrUpdateHandler}
  cancelHandler={cancelHandler} //props fonksiyonu tetikliyor
  />
 
