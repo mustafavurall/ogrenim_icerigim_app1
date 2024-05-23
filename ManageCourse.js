@@ -10,6 +10,11 @@ export default function ManageCourse({route, navigation}) {
   const coursesContext = useContext(CoursesContext);
   const courseId=route.params?.courseId;
   let isEditing = false;
+
+
+const selectedCourse=coursesContext.courses.find(
+  (course) => course.id===courseId)
+
   
   if(courseId)
   {
@@ -60,6 +65,10 @@ navigation.goBack();
  buttonLabel={isEditing ? 'Güncelle' : 'Ekle'}
  onSubmit={addOrUpdateHandler}
  cancelHandler={cancelHandler} //props fonksiyonu tetikliyor
+ defaultValues={selectedCourse}
+ 
+
+ 
  />
 
 
