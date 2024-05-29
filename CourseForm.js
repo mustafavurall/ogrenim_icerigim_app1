@@ -8,27 +8,39 @@ export default function CourseForm({cancelHandler,onSubmit,buttonLabel,defaultVa
  
   const [inputs, setInputs] = useState({
 
-    amount:  defaultValues ? defaultValues.amount.toString():'',
-    date: defaultValues ? getFormattedDate(defaultValues.date):'',
-    description: defaultValues? defaultValues.description:'',
+    amount:{value:defaultValues ? defaultValues.amount.toString():'',
+      isValid:true},  
+    date:{value:defaultValues ? getFormattedDate(defaultValues.date):'',
+      isValid:true},
+    description:{value:defaultValues? defaultValues.description:'',
+      isValid:true},
 
   });
-
+//ekle ya da güncellede burası tetiklenecek
   function addOrUpdateHandler(){
 
     const courseData={
-amount:Number(inputs.amount) ,
-date:new Date(inputs.date),
-description:inputs.description
+amount:Number(inputs.amount.value) ,
+date:new Date(inputs.date.value),
+description:inputs.description.value,
 
     };
+    console.log(courseData);
 
-    const amountIsValid=!isNaN(courseData.amount) && courseData.amount >0;
+    const amountIsValid= courseData.amount >0;
     const dateIsValid=courseData.date.toString() !== 'Invalid Date' ;
     const descriptionIsValid=courseData.description.trim().length>0 ;// sağdan soldan boşluk olmasını engelledik
     
     if(!amountIsValid || !dateIsValid || !descriptionIsValid){
-Alert.alert('Hatalı Giriş','Lütfen tüm alanları doğru formatta giriniz!');
+        setInputs((currentInputs)=>{
+          return{
+            amount:{value: Number(currentInputs.amount.value),isValid:amountIsValid},
+            date:{value:currentInputs.date.value,isValid:dateIsValid},
+            description:{value:currentInputs.description.value,isValid:descriptionIsValid},
+
+          }
+        })
+
       return;
     }
     
@@ -43,7 +55,7 @@ Alert.alert('Hatalı Giriş','Lütfen tüm alanları doğru formatta giriniz!');
 setInputs((currentInput)=>{
 return{
  ...currentInput,
- [inputIdentifier]:enteredValue // değiştirilmiş değer
+ [inputIdentifier]:{value: enteredValue,isValid:true }, // değiştirilmiş değer
 
 
 }
@@ -68,7 +80,7 @@ return{
 
 keyboardType:'decimal-pad',
 onChangeText: inputChange.bind(this,'amount'),
-value:inputs.amount, //ulaşıcam
+value:inputs.amount.value.toString(), //ulaşıcam
 }}/>
 
 
@@ -79,7 +91,7 @@ label="Tarih" textInputConfig={{
 placeHolder:'YYYY-MM-DD',
 maxLength:10,
 onChangeText: inputChange.bind(this,'date'),
-value:inputs.date,
+value:inputs.date.value,
 
 }}/>
       </View>
@@ -91,11 +103,29 @@ value:inputs.date,
 
 multiline:true,
 onChangeText: inputChange.bind(this,'description'),
-value:inputs.description,
+value:inputs.description.value,
 
-}}
-
+}}//Butonlarım burada
 />
+
+
+{!inputs.amount.isValid && (
+  <Text>
+    Lütfen tutarı doğru şekilde giriniz.
+  </Text>
+)}
+{!inputs.date.isValid && (
+  <Text>
+    Lütfen tarihi doğru şekilde giriniz.
+  </Text>
+)}
+{!inputs.description.isValid && (
+  <Text>
+    Lütfen başlığı doğru şekilde giriniz.
+  </Text>
+)}
+
+
 <View style={styles.buttons}>
   <Pressable onPress={cancelHandler}>
     <View style={styles.cancel}>
