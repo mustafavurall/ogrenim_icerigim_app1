@@ -3,13 +3,15 @@ import React, { useEffect } from 'react'
 import Courses from '../components/Courses';
 import { CoursesContext } from '../store/coursesContext';
 import { getLastWeek } from '../helper/date';
-import { useContext } from 'react';
+import { useContext,useState } from 'react';
 import { getCourses } from '../helper/http';
 
 
 
 
 export default function RecentCourses() {
+
+    const [fetchedCourses, setFetchedCourses] = useState([]);
 
     const coursesContext = useContext(CoursesContext);
     //Son Tarihi Listeleme
@@ -19,11 +21,12 @@ export default function RecentCourses() {
   useEffect(()=>{
     async function takeCourses(){
         const courses= await getCourses();
-
+        coursesContext.setCourse(courses);
+       // setFetchedCourses(courses);
     }
 
    takeCourses();
-  });
+  },[]);
   
   
     const RecentCourses=coursesContext.courses.filter((course)=>{
