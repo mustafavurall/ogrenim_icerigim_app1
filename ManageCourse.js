@@ -3,6 +3,7 @@ import React, { useContext, useLayoutEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { CoursesContext } from '../store/coursesContext';
 import CourseForm from '../components/CourseForm';
+import { storeCourse } from '../helper/http';
 
 
 export default function ManageCourse({route, navigation}) {
@@ -46,6 +47,7 @@ function addOrUpdateHandler(courseData){// duruma göre contexte gönderme
 
   }
   else{
+    storeCourse(courseData);
     coursesContext.addCourse(courseData);
   }
 
