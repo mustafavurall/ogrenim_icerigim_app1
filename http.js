@@ -1,10 +1,33 @@
 //axios isteklerini import ediyorum
 import axios from "axios";
 
-const url='https://react-native-d7198-default-rtdb.firebaseio.com'
+const url='https://react-native-d7198-default-rtdb.firebaseio.com';
 
 
-export function storeCourse(courseData){
-axios.post(url + '/courses.json',courseData)
-
+export async function storeCourse(courseData){
+const response= await axios.post(url + '/courses.json',courseData);
+const id=response.data.name;
+return id;
 }
+
+export async function getCourses(){
+   const response = await axios.get(url + '/courses.json');
+    
+const courses =[];
+
+  for(const key in response.data) {
+
+    const courseObj={
+
+        id:key,
+        amount: response.data[key].amount,
+        date: new Date(response.data[key].date) ,
+        description: response.data[key].description,
+        
+    };
+    courses.push(courseObj);
+
+  }
+
+  return courses;
+    }

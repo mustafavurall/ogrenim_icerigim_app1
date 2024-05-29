@@ -14,14 +14,15 @@ export const CoursesContext = createContext({
 function coursesReducer(state,action){
     switch(action.type){
  case 'ADD'  :
-        const id = new Date().toString() + Math.random().toString();
-       return[{...action.payload,id:id},...state];//array içindeki eleman
+       // const id = new Date().toString() + Math.random().toString();
+       return[action.payload,...state];//array içindeki eleman
     
     case 'DELETE' : 
     return state.filter((course)=>course.id !==action.payload);
     
-  case'SET':
-      return action.payload;
+  case'SET':// en sondakini en başa atama
+    const reversedData=action.payload.reverse();
+      return reversedData;
     case 'UPDATE' :
         const updatableCourseIndex=state.findIndex((course)=>course.id === action.payload.id);
         const updatableCourse = state[updatableCourseIndex]

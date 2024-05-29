@@ -40,15 +40,15 @@ function cancelHandler(){ //hangi ekrandan geldiyse oraya gidecek
 }
  
 
-function addOrUpdateHandler(courseData){// duruma göre contexte gönderme
+async function addOrUpdateHandler(courseData){// duruma göre contexte gönderme
 
   if(isEditing){
     coursesContext.updateCourse(courseId, courseData);
 
   }
   else{
-    storeCourse(courseData);
-    coursesContext.addCourse(courseData);
+  const id= await  storeCourse(courseData);
+    coursesContext.addCourse({...courseData,id:id});
   }
 
 
