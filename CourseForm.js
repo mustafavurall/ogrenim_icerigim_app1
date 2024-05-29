@@ -74,9 +74,13 @@ return{
    <Text style={styles.title}>Kurs Bilgileri</Text>
 
       <View style={styles.priceAndDate}>
+     
+     
       <Input 
       style={styles.flexAll}
-      label="Tutar" textInputConfig={{
+      label="Tutar" 
+      invalid={!inputs.amount.isValid}
+      textInputConfig={{
 
 keyboardType:'decimal-pad',
 onChangeText: inputChange.bind(this,'amount'),
@@ -86,20 +90,24 @@ value:inputs.amount.value.toString(), //ulaşıcam
 
 <Input // başlık için styles yollamadım(alt tarafı bozmadım)
 style={styles.flexAll}
-label="Tarih" textInputConfig={{
+label="Tarih" 
+invalid={!inputs.date.isValid}
+textInputConfig={{
 
 placeHolder:'YYYY-MM-DD',
 maxLength:10,
 onChangeText: inputChange.bind(this,'date'),
 value:inputs.date.value,
 
-}}/>
+}}/>S
       </View>
 
 
 
 
-<Input label="Başlık" textInputConfig={{
+<Input label="Başlık"
+ invalid={!inputs.description.isValid}
+ textInputConfig={{
 
 multiline:true,
 onChangeText: inputChange.bind(this,'description'),
@@ -107,6 +115,8 @@ value:inputs.description.value,
 
 }}//Butonlarım burada
 />
+
+<View style={styles.error}> 
 
 
 {!inputs.amount.isValid && (
@@ -124,6 +134,8 @@ value:inputs.description.value,
     Lütfen başlığı doğru şekilde giriniz.
   </Text>
 )}
+
+</View>
 
 
 <View style={styles.buttons}>
@@ -200,6 +212,12 @@ flexDirection:'row'
   
   addOrDeleteText:{
     color:'white' ,
+  },
+
+  error:{
+
+    alignItems:'center',
+    marginBottom:10,
   },
 
 })
