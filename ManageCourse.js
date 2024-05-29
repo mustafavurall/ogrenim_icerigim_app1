@@ -3,7 +3,7 @@ import React, { useContext, useLayoutEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { CoursesContext } from '../store/coursesContext';
 import CourseForm from '../components/CourseForm';
-import { storeCourse } from '../helper/http';
+import { storeCourse, updateCourse,deleteCourseHttp } from '../helper/http';
 
 
 export default function ManageCourse({route, navigation}) {
@@ -29,9 +29,10 @@ const selectedCourse=coursesContext.courses.find(
 
   },[navigation,isEditing]);
 
-function deleteCourse(){ //hangi ekrandan geldiyse oraya gidecek
+async function deleteCourse(){ //hangi ekrandan geldiyse oraya gidecek
   
   coursesContext.deleteCourse(courseId);
+  await deleteCourseHttp(courseId);
   navigation.goBack();
 
 }
@@ -44,6 +45,8 @@ async function addOrUpdateHandler(courseData){// duruma göre contexte gönderme
 
   if(isEditing){
     coursesContext.updateCourse(courseId, courseData);
+
+    await updateCourse(courseId, courseData);
 
   }
   else{

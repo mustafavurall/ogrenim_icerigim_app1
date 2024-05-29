@@ -31,3 +31,13 @@ const courses =[];
 
   return courses;
     }
+
+    export function updateCourse(id,courseData){
+      return axios.put(url + `/courses${id}.json`,courseData);
+      
+      }
+
+      export function deleteCourseHttp(id){
+      return  axios.delete(url + `/courses${id}.json`);
+       
+       }
