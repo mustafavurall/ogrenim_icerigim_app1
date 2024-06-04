@@ -6,6 +6,7 @@ import { getLastWeek } from '../helper/date';
 import { useContext,useState } from 'react';
 import { getCourses } from '../helper/http';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorText from '../components/ErrorText';
 
 
 
@@ -14,18 +15,30 @@ export default function RecentCourses() {
 
     const [fetchedCourses, setFetchedCourses] = useState([]);
 
-    const [isFetching, setIsFetching] = useState(true)
+    const [isFetching, setIsFetching] = useState(true);
 
     const coursesContext = useContext(CoursesContext);
+   
+    const [error, setError] = useState();
+   
+   
     //Son Tarihi Listeleme
+    
   
   
   
   useEffect(()=>{
     async function takeCourses(){
-      setIsFetching(true)
+      setError(null);
+          setIsFetching(true);
+      try {
+       
         const courses= await getCourses();
         coursesContext.setCourse(courses);
+      } catch (error) {
+        setError('Kursları çekemedik!');
+      }
+      
         setIsFetching(false)
        // setFetchedCourses(courses);
     }
@@ -33,6 +46,8 @@ export default function RecentCourses() {
    takeCourses();
   },[]);
 
+  if(error && !isFetching){
+    return<ErrorText message={error}/>;
 
   if(isFetching){
     return <LoadingSpinner/>
@@ -52,4 +67,4 @@ return course.date >= dateLastWeek && course.date <=today;
 
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({})}

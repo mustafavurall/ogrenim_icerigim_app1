@@ -5,10 +5,12 @@ import { CoursesContext } from '../store/coursesContext';
 import CourseForm from '../components/CourseForm';
 import { storeCourse, updateCourse,deleteCourseHttp } from '../helper/http';
 import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorText from '../components/ErrorText';
 
 
 export default function ManageCourse({route, navigation}) {
 const [isSubmitting, setIsSubmitting] = useState(false);
+const [error, setError] = useState();
   const coursesContext = useContext(CoursesContext)
   const courseId=route.params?.courseId;
   let isEditing = false;
@@ -31,12 +33,25 @@ const selectedCourse=coursesContext.courses.find(
   },[navigation,isEditing]);
 
 async function deleteCourse(){ //hangi ekrandan geldiyse oraya gidecek
-  setIsSubmitting(true)
-  coursesContext.deleteCourse(courseId);
-  await deleteCourseHttp(courseId);
-  navigation.goBack();
+  setIsSubmitting(true);
+  setError(null);
+
+
+  try {
+    coursesContext.deleteCourse(courseId);
+    await deleteCourseHttp(courseId);
+    navigation.goBack();
+  } catch (error) {
+    setError('Kursları Silemedik!');
+    setIsSubmitting(false);
+
+
+  }
+  
 
 }
+if(error && !isSubmitting){
+  return<ErrorText message={error}/>;
 function cancelHandler(){ //hangi ekrandan geldiyse oraya gidecek
   navigation.goBack();
 }
@@ -45,7 +60,10 @@ function cancelHandler(){ //hangi ekrandan geldiyse oraya gidecek
 async function addOrUpdateHandler(courseData){// duruma göre contexte gönderme
 
 
-  setIsSubmitting(true)
+  setIsSubmitting(true);
+  setError(null);
+
+try {
   if(isEditing){
     coursesContext.updateCourse(courseId, courseData);
 
@@ -60,8 +78,14 @@ async function addOrUpdateHandler(courseData){// duruma göre contexte gönderme
 
 navigation.goBack();
   
+} catch (error) {
+  
+}
+setError('Kurslar Eklemede veya Güncellemede Problem Var!');
+setIsSubmitting(false);
 
 }
+
 if (isSubmitting){
   return <LoadingSpinner/>;
 }
@@ -108,3 +132,4 @@ deleteContainer:{
 },
 
 });
+}
