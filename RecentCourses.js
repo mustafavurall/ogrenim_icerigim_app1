@@ -5,6 +5,7 @@ import { CoursesContext } from '../store/coursesContext';
 import { getLastWeek } from '../helper/date';
 import { useContext,useState } from 'react';
 import { getCourses } from '../helper/http';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 
 
@@ -13,6 +14,8 @@ export default function RecentCourses() {
 
     const [fetchedCourses, setFetchedCourses] = useState([]);
 
+    const [isFetching, setIsFetching] = useState(true)
+
     const coursesContext = useContext(CoursesContext);
     //Son Tarihi Listeleme
   
@@ -20,13 +23,20 @@ export default function RecentCourses() {
   
   useEffect(()=>{
     async function takeCourses(){
+      setIsFetching(true)
         const courses= await getCourses();
         coursesContext.setCourse(courses);
+        setIsFetching(false)
        // setFetchedCourses(courses);
     }
 
    takeCourses();
   },[]);
+
+
+  if(isFetching){
+    return <LoadingSpinner/>
+  }
   
   
     const RecentCourses=coursesContext.courses.filter((course)=>{

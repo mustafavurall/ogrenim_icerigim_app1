@@ -1,14 +1,15 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useContext, useLayoutEffect } from 'react';
+import React, {useState, useContext, useLayoutEffect } from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { CoursesContext } from '../store/coursesContext';
 import CourseForm from '../components/CourseForm';
 import { storeCourse, updateCourse,deleteCourseHttp } from '../helper/http';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 
 export default function ManageCourse({route, navigation}) {
-
-  const coursesContext = useContext(CoursesContext);
+const [isSubmitting, setIsSubmitting] = useState(false);
+  const coursesContext = useContext(CoursesContext)
   const courseId=route.params?.courseId;
   let isEditing = false;
 
@@ -30,7 +31,7 @@ const selectedCourse=coursesContext.courses.find(
   },[navigation,isEditing]);
 
 async function deleteCourse(){ //hangi ekrandan geldiyse oraya gidecek
-  
+  setIsSubmitting(true)
   coursesContext.deleteCourse(courseId);
   await deleteCourseHttp(courseId);
   navigation.goBack();
@@ -43,6 +44,8 @@ function cancelHandler(){ //hangi ekrandan geldiyse oraya gidecek
 
 async function addOrUpdateHandler(courseData){// duruma göre contexte gönderme
 
+
+  setIsSubmitting(true)
   if(isEditing){
     coursesContext.updateCourse(courseId, courseData);
 
@@ -58,6 +61,9 @@ async function addOrUpdateHandler(courseData){// duruma göre contexte gönderme
 navigation.goBack();
   
 
+}
+if (isSubmitting){
+  return <LoadingSpinner/>;
 }
 
 
