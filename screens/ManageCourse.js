@@ -1,103 +1,110 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import React, { useLayoutEffect } from 'react';
-import { FontAwesome5 } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { useLayoutEffect } from 'react';
+import { EvilIcons } from '@expo/vector-icons';
+import { useContext } from 'react';
+import { CoursesContext } from '../store/coursesContext';
+import CourseForm from '../components/CourseForm';
+import { storeCourse, updateCourse, deleteCourseHttp } from '../helper/http';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorText from '../components/ErrorText';
 
-
-export default function ManageCourse({route, navigation}) {
-  const courseId=route.params?.courseId;
+export default function ManageCourse({ route, navigation }) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState();
+  const coursesContext = useContext(CoursesContext);
+  const courseId = route.params?.courseId;
   let isEditing = false;
-  
-  if(courseId)
-  {
-    isEditing=true
+
+  const selectedCourse = coursesContext.courses.find(
+    (course) => course.id === courseId
+  );
+
+  if (courseId) {
+    isEditing = true;
   }
-  
-  useLayoutEffect(()=>{
+
+  useLayoutEffect(() => {
     navigation.setOptions({
-      title: isEditing?'Kursu Güncelle':'Kurs Ekle',
-    })
+      title: isEditing ? 'Kursu Güncelle' : 'Kurs Ekle',
+    });
+  }, [navigation, isEditing]);
 
-  },[navigation,isEditing]);
+  async function deleteCourse() {
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      coursesContext.deleteCourse(courseId);
+      await deleteCourseHttp(courseId);
+      navigation.goBack();
+    } catch (error) {
+      setError('Kursları silemedik!');
+      setIsSubmitting(false);
+    }
+  }
+  if (error && !isSubmitting) {
+    return <ErrorText message={error} />;
+  }
 
-function deleteCourse(){ //hangi ekrandan geldiyse oraya gidecek
-  navigation.goBack();
-}
-function cancelHandler(){ //hangi ekrandan geldiyse oraya gidecek
-  navigation.goBack();
-}
+  function cancelHandler() {
+    navigation.goBack();
+  }
 
+  async function addOrUpdateHandler(courseData) {
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      if (isEditing) {
+        coursesContext.updateCourse(courseId, courseData);
+        await updateCourse(courseId, courseData);
+      } else {
+        const id = await storeCourse(courseData);
+        coursesContext.addCourse({ ...courseData, id: id });
+      }
+      navigation.goBack();
+    } catch (error) {
+      setError('Kurs eklemede veya güncellemede problem var!');
+      setIsSubmitting(false);
+    }
+  }
 
-
+  if (isSubmitting) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <View style={styles.container}>
+      <CourseForm
+        buttonLabel={isEditing ? 'Güncelle' : 'Ekle'}
+        onSubmit={addOrUpdateHandler}
+        cancelHandler={cancelHandler}
+        defaultValues={selectedCourse}
+      />
 
-
-<View style={styles.buttons}>
-  <Pressable onPress={cancelHandler}>
-    <View style={styles.cancel}>
-      <Text style={styles.cancelText}>
-        İptal Et
-      </Text>
-    </View>
-  </Pressable>
-  <Pressable>
-    <View style={styles.addOrDelete}>
-      <Text style={styles.addOrDeleteText}>
-       {isEditing ? "Güncelle":"Ekle"}
-      </Text>
-    </View>
-  </Pressable>
-</View>
-
-
-
-
-
-      {isEditing && ( <View style={styles.deleteContainer}> <FontAwesome5 name="trash" size={40} color="black" onPress={deleteCourse} />
-      </View>
+      {isEditing && (
+        <View style={styles.deleteContainer}>
+          <EvilIcons
+            name="trash"
+            size={36}
+            color="black"
+            onPress={deleteCourse}
+          />
+        </View>
       )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-container:{
-  flex:1,
-  padding: 25,
-},
-deleteContainer:{
-  alignItems:'center',
-  borderTopWidth:2,
-  borderTopColor:'blue',
-  paddingTop:10,
-  marginTop:16,
-},
-buttons:{
-  flexDirection:'row',
-  justifyContent:'center',
-},
-cancel:{
-  backgroundColor:'red',
-  minWidth:120,
-  marginRight:10,
-  padding: 8,
-  alignItems: 'center',
-},
-
-cancelText:{
-  color:'white',
-},
-
-addOrDelete:{
-  backgroundColor:'blue',
-  minWidth:120,
-  marginRight:10,
-  padding: 8,
-  alignItems: 'center',
-},
-
-addOrDeleteText:{
-  color:'white' ,
-},
+  container: {
+    flex: 1,
+    padding: 25,
+  },
+  deleteContainer: {
+    alignItems: 'center',
+    borderTopWidth: 4,
+    borderTopColor: '#FF8C00',
+    paddingTop: 10,
+    marginTop: 16,
+  },
 });
